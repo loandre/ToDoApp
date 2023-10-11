@@ -125,6 +125,13 @@ class _TodoScreenState extends State<TodoScreen> {
                   hintStyle: TextStyle(color: Colors.black45),
                   border: InputBorder.none,
                 ),
+                onSubmitted: (value) {
+                  _addTodoItem(value);
+                  _controller.clear();
+                  setState(() {
+                    containerHeight = 0.0;
+                  });
+                },
               ),
             ),
             IconButton(

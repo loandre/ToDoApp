@@ -46,7 +46,8 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> queryAllRows() async {
     Database db = await instance.database;
-    List<Map<String, dynamic>> items = await db.query(table);
+    List<Map<String, dynamic>> items =
+        await db.query(table, orderBy: '$columnId DESC');
     print('Fetched ${items.length} items from database.');
     return items;
   }

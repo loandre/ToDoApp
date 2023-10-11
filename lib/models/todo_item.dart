@@ -18,11 +18,9 @@ class TodoItem {
   }
 
   // Converter um Map em um TodoItem
-  factory TodoItem.fromMap(Map<String, dynamic> map) {
-    return TodoItem(
-      id: map['id'],
-      title: map['title'],
-      isDone: map['isDone'] == 1,
-    );
-  }
+  factory TodoItem.fromMap(Map<String, dynamic> json) => new TodoItem(
+        id: json["_id"],
+        title: json["title"],
+        isDone: json["isDone"] == 1,
+      );
 }

@@ -19,12 +19,25 @@ class _TodoScreenState extends State<TodoScreen> {
   void _loadTodoItems() async {
     List<Map<String, dynamic>> allRows =
         await DatabaseHelper.instance.queryAllRows();
+    print("Itens carregados do banco de dados: $allRows");
+
     List<TodoItem> loadedItems =
         allRows.map((row) => TodoItem.fromMap(row)).toList();
 
     setState(() {
       todoItems = loadedItems;
     });
+  }
+
+  void _deleteTodoItem(TodoItem item) async {
+    print("Tentando excluir item com ID: ${item.id}");
+    if (item.id != null) {
+      int rowsDeleted = await DatabaseHelper.instance.delete(item.id!);
+      print("Número de linhas excluídas: $rowsDeleted");
+      setState(() {
+        todoItems.remove(item);
+      });
+    }
   }
 
   void _toggleTodoItem(TodoItem item) async {
@@ -84,6 +97,10 @@ class _TodoScreenState extends State<TodoScreen> {
         style: TextStyle(
           decoration: item.isDone ? TextDecoration.lineThrough : null,
         ),
+      ),
+      trailing: IconButton(
+        icon: Icon(Icons.delete),
+        onPressed: () => _deleteTodoItem(item),
       ),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/todo_screen.dart';
+import 'package:to_do_app/screens/empty_todo.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +16,10 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: TodoScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => EmptyTodoScreen(),
+      },
     );
   }
 }

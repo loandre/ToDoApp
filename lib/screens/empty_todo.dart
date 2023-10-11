@@ -15,50 +15,65 @@ class EmptyTodoScreenState extends State<EmptyTodoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Center(
-              child: Text(
-                'todo',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(height: 15),
-            Center(
-              child: Text(
-                DateFormat('EEEE dd MMM yyyy').format(DateTime.now()),
-                style: TextStyle(color: Colors.grey[600]),
-              ),
-            ),
-            SizedBox(height: 40),
-            ElevatedButton.icon(
-              onPressed: _navigateToInputScreen,
-              icon: Icon(Icons.add, color: Colors.white),
-              label: Text('Add item'),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.black,
-                onPrimary: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+      body: Stack(
+        children: [
+          Positioned(
+            top: screenHeight * 0.529,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(color: Colors.grey[100]),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Spacer(flex: 3),
+                Center(
+                  child: Text(
+                    'todo',
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              ),
+                SizedBox(height: 15),
+                Center(
+                  child: Text(
+                    DateFormat('EEEE dd MMM yyyy').format(DateTime.now()),
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ),
+                Spacer(flex: 2),
+                ElevatedButton.icon(
+                  onPressed: _navigateToInputScreen,
+                  icon: Icon(Icons.add, color: Colors.white),
+                  label: Text('Add item'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.black,
+                    onPrimary: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  ),
+                ),
+                Spacer(flex: 2),
+                Center(
+                  child: Text(
+                    "What do you want to do today?\nStart adding items to your to-do list.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ),
+                Spacer(flex: 3),
+              ],
             ),
-            SizedBox(height: 40),
-            Center(
-              child: Text(
-                "What do you want to do today?\nStart adding items to your to-do list.",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey[600]),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

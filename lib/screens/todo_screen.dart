@@ -150,14 +150,39 @@ class _TodoScreenState extends State<TodoScreen> {
     }
   }
 
+  Widget customCheckbox(bool value, ValueChanged<bool?> onChanged) {
+    return GestureDetector(
+      onTap: () {
+        onChanged(!value);
+      },
+      child: Container(
+        width: 22.0,
+        height: 22.0,
+        margin: EdgeInsets.all(3.0),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.black, width: 1.6),
+        ),
+        child: Center(
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 200),
+            width: value ? 16.0 : 0.0,
+            height: 16.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildTodoItem(TodoItem item) {
     return ListTile(
-      leading: Checkbox(
-        value: item.isDone,
-        onChanged: (bool? value) {
-          _toggleTodoItem(item);
-        },
-      ),
+      leading: customCheckbox(item.isDone, (value) {
+        _toggleTodoItem(item);
+      }),
       title: Text(
         item.title,
         style: TextStyle(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_app/models/todo_item.dart';
 import 'package:to_do_app/utils/database_helper.dart';
+import 'package:intl/intl.dart';
 
 class TodoScreen extends StatefulWidget {
   @override
@@ -119,7 +120,7 @@ class _TodoScreenState extends State<TodoScreen> {
             ),
             SizedBox(height: 10),
             Text(
-              'Monday 25 Sep 2017', // Representação estática por enquanto
+              DateFormat('EEEE dd MMM yyyy').format(DateTime.now()),
               style: TextStyle(color: Colors.grey[600]),
             ),
             SizedBox(height: 20),

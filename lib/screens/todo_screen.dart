@@ -10,6 +10,7 @@ class TodoScreen extends StatefulWidget {
 
 class _TodoScreenState extends State<TodoScreen> {
   List<TodoItem> todoItems = [];
+  bool isInputVisible = false;
 
   @override
   void initState() {
@@ -125,7 +126,11 @@ class _TodoScreenState extends State<TodoScreen> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {}, // ação do botão
+              onPressed: () {
+                setState(() {
+                  isInputVisible = !isInputVisible;
+                });
+              },
               child: Text('+ Add item'),
               style: ElevatedButton.styleFrom(
                 primary: Colors.black,
@@ -136,7 +141,7 @@ class _TodoScreenState extends State<TodoScreen> {
               ),
             ),
             SizedBox(height: 20),
-            _buildInputWidget(),
+            if (isInputVisible) ...[_buildInputWidget()],
             Expanded(
               child: ListView.builder(
                 itemCount: todoItems.length,

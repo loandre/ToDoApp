@@ -11,7 +11,6 @@ class DatabaseHelper {
   static const columnTitle = 'title';
   static const columnIsDone = 'isDone';
 
-  // torna esta classe singleton
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
@@ -40,22 +39,30 @@ class DatabaseHelper {
 
   Future<int> insert(Map<String, dynamic> row) async {
     Database db = await instance.database;
-    return await db.insert(table, row);
+    int id = await db.insert(table, row);
+    print('Inserted item with id: $id and data: $row');
+    return id;
   }
 
   Future<List<Map<String, dynamic>>> queryAllRows() async {
     Database db = await instance.database;
-    return await db.query(table);
+    List<Map<String, dynamic>> items = await db.query(table);
+    print('Fetched ${items.length} items from database.');
+    return items;
   }
 
   Future<int> update(Map<String, dynamic> row) async {
     Database db = await instance.database;
-    int id = row[columnId];
+    int id = row['_id'];
+    print('Updating item with ID $id with data: $row');
     return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
   }
 
   Future<int> delete(int id) async {
     Database db = await instance.database;
-    return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+    int affectedRows =
+        await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+    print('Deleted item with id: $id. Affected rows: $affectedRows');
+    return affectedRows;
   }
 }

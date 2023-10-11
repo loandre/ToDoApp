@@ -12,6 +12,7 @@ class _TodoScreenState extends State<TodoScreen> {
   List<TodoItem> todoItems = [];
   bool isInputVisible = false;
   double containerHeight = 0.0;
+  TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _TodoScreenState extends State<TodoScreen> {
   }
 
   void _toggleTodoItem(TodoItem item) async {
+    print("Toggling item with title: ${item.title}");
     setState(() {
       item.isDone = !item.isDone;
     });
@@ -62,27 +64,83 @@ class _TodoScreenState extends State<TodoScreen> {
     }
   }
 
-  Widget _buildInputWidget() {
-    TextEditingController controller = TextEditingController();
+  Widget _buildAddButton() {
+    return ElevatedButton(
+      onPressed: () {
+        setState(() {
+          containerHeight = 60.0;
+        });
+      },
+      child: Text('+ Add item'),
+      style: ElevatedButton.styleFrom(
+        primary: Colors.black,
+        onPrimary: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+      ),
+    );
+  }
 
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: TextField(
-            controller: controller,
-            decoration:
-                InputDecoration(hintText: 'What do you want to do today?'),
+  Widget _buildInputWidget() {
+    if (containerHeight == 0.0) {
+      return ElevatedButton(
+        onPressed: () {
+          setState(() {
+            containerHeight = 60.0;
+          });
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.add, color: Colors.white),
+            SizedBox(width: 5.0),
+            Text('+ Add item'),
+          ],
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.black,
+          onPrimary: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
           ),
         ),
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () {
-            _addTodoItem(controller.text);
-            controller.clear();
-          },
+      );
+    } else {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(30),
         ),
-      ],
-    );
+        child: Row(
+          children: [
+            SizedBox(width: 15.0),
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  hintText: 'What do you want to do today?',
+                  hintStyle: TextStyle(color: Colors.black45),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.add, color: Colors.black),
+              onPressed: () {
+                _addTodoItem(_controller.text);
+                _controller.clear();
+                setState(() {
+                  containerHeight = 0.0;
+                });
+              },
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _buildTodoItem(TodoItem item) {
@@ -90,9 +148,7 @@ class _TodoScreenState extends State<TodoScreen> {
       leading: Checkbox(
         value: item.isDone,
         onChanged: (bool? value) {
-          setState(() {
-            item.isDone = value!;
-          });
+          _toggleTodoItem(item);
         },
       ),
       title: Text(
@@ -126,35 +182,13 @@ class _TodoScreenState extends State<TodoScreen> {
               style: TextStyle(color: Colors.grey[600]),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  if (containerHeight == 0.0) {
-                    containerHeight =
-                        60.0; // ajuste esse valor conforme necessário
-                  } else {
-                    containerHeight = 0.0;
-                  }
-                });
-              },
-              child: Text('+ Add item'),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.black,
-                onPrimary: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
+            if (containerHeight == 0.0) _buildAddButton(),
+            AnimatedContainer(
+              duration: Duration(milliseconds: 50),
+              height: containerHeight,
+              child: _buildInputWidget(),
             ),
             SizedBox(height: 20),
-            AnimatedContainer(
-              duration: Duration(milliseconds: 200),
-              height: containerHeight,
-              child: Visibility(
-                visible: containerHeight > 0,
-                child: _buildInputWidget(),
-              ),
-            ),
             Expanded(
               child: ListView.builder(
                 itemCount: todoItems.length,

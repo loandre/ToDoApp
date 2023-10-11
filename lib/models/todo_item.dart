@@ -11,16 +11,22 @@ class TodoItem {
 
   // Converter um TodoItem em um Map
   Map<String, dynamic> toMap() {
-    return {
+    var map = <String, dynamic>{
       'title': title,
       'isDone': isDone ? 1 : 0,
     };
+    if (id != null) {
+      map['_id'] = id!;
+    }
+    return map;
   }
 
   // Converter um Map em um TodoItem
-  factory TodoItem.fromMap(Map<String, dynamic> json) => new TodoItem(
-        id: json["_id"],
-        title: json["title"],
-        isDone: json["isDone"] == 1,
-      );
+  factory TodoItem.fromMap(Map<String, dynamic> map) {
+    return TodoItem(
+      id: map['_id'],
+      title: map['title'],
+      isDone: map['isDone'] == 1,
+    );
+  }
 }

@@ -6,10 +6,10 @@ import 'package:to_do_app/screens/empty_todo.dart';
 
 class TodosListScreen extends StatefulWidget {
   @override
-  _TodosListScreenState createState() => _TodosListScreenState();
+  TodosListScreenState createState() => TodosListScreenState();
 }
 
-class _TodosListScreenState extends State<TodosListScreen> {
+class TodosListScreenState extends State<TodosListScreen> {
   List<TodoItem> todoItems = [];
 
   @override
@@ -19,8 +19,10 @@ class _TodosListScreenState extends State<TodosListScreen> {
   }
 
   void _loadTodoItems() async {
-    List<Map<String, dynamic>> allRows = await DatabaseHelper.instance.queryAllRows();
-    List<TodoItem> loadedItems = allRows.map((row) => TodoItem.fromMap(row)).toList();
+    List<Map<String, dynamic>> allRows =
+        await DatabaseHelper.instance.queryAllRows();
+    List<TodoItem> loadedItems =
+        allRows.map((row) => TodoItem.fromMap(row)).toList();
 
     setState(() {
       todoItems = loadedItems;
@@ -34,19 +36,50 @@ class _TodosListScreenState extends State<TodosListScreen> {
     await DatabaseHelper.instance.update(item.toMap());
   }
 
+  void _deleteTodoItem(TodoItem item) async {
+    if (item.id != null) {
+      int rowsDeleted = await DatabaseHelper.instance.delete(item.id!);
+      print("Número de linhas excluídas: $rowsDeleted");
+      setState(() {
+        todoItems.remove(item);
+      });
+    }
+  }
+
   Widget _buildTodoItem(TodoItem item) {
-    return ListTile(
-      leading: GestureDetector(
-        onTap: () => _toggleTodoItem(item),
-        child: Icon(
-          item.isDone ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-          color: item.isDone ? Colors.black : Colors.black45,
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        color: Colors.white,
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: Icon(Icons.delete, color: Colors.black),
+          ),
         ),
       ),
-      title: Text(
-        item.title,
-        style: TextStyle(
-          decoration: item.isDone ? TextDecoration.lineThrough : null,
+      onDismissed: (direction) {
+        _deleteTodoItem(item);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Todo deletado")));
+      },
+      child: ListTile(
+        leading: GestureDetector(
+          onTap: () => _toggleTodoItem(item),
+          child: Icon(
+            item.isDone
+                ? Icons.radio_button_checked
+                : Icons.radio_button_unchecked,
+            color: item.isDone ? Colors.black : Colors.black45,
+          ),
+        ),
+        title: Text(
+          item.title,
+          style: TextStyle(
+            decoration: item.isDone ? TextDecoration.lineThrough : null,
+          ),
         ),
       ),
     );

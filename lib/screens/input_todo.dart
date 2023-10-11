@@ -6,11 +6,11 @@ import 'package:to_do_app/screens/list_todos.dart';
 
 class InputTodoScreen extends StatefulWidget {
   @override
-  _InputTodoScreenState createState() => _InputTodoScreenState();
+  InputTodoScreenState createState() => InputTodoScreenState();
 }
 
-class _InputTodoScreenState extends State<InputTodoScreen> {
-  TextEditingController _controller = TextEditingController();
+class InputTodoScreenState extends State<InputTodoScreen> {
+  TextEditingController controller = TextEditingController();
 
   void _addTodoItem(String title) async {
     if (title.isNotEmpty) {
@@ -30,17 +30,22 @@ class _InputTodoScreenState extends State<InputTodoScreen> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'todo',
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            Center(
+              child: Text(
+                'todo',
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              ),
             ),
-            SizedBox(height: 10),
-            Text(
-              DateFormat('EEEE dd MMM yyyy').format(DateTime.now()),
-              style: TextStyle(color: Colors.grey[600]),
+            SizedBox(height: 15),
+            Center(
+              child: Text(
+                DateFormat('EEEE dd MMM yyyy').format(DateTime.now()),
+                style: TextStyle(color: Colors.grey[600]),
+              ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 40),
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -52,10 +57,10 @@ class _InputTodoScreenState extends State<InputTodoScreen> {
                   SizedBox(width: 15.0),
                   Expanded(
                     child: TextField(
-                      controller: _controller,
+                      controller: controller,
                       style: TextStyle(color: Colors.black),
                       decoration: InputDecoration(
-                        hintText: 'O que você quer fazer hoje?',
+                        hintText: 'What do you want to do today?',
                         hintStyle: TextStyle(color: Colors.black45),
                         border: InputBorder.none,
                       ),
@@ -67,11 +72,19 @@ class _InputTodoScreenState extends State<InputTodoScreen> {
                   IconButton(
                     icon: Icon(Icons.add, color: Colors.black),
                     onPressed: () {
-                      _addTodoItem(_controller.text);
-                      _controller.clear();
+                      _addTodoItem(controller.text);
+                      controller.clear();
                     },
                   ),
                 ],
+              ),
+            ),
+            SizedBox(height: 40),
+            Center(
+              child: Text(
+                "What do you want to do today?\nStart adding items to your to-do list.",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey[600]),
               ),
             ),
           ],

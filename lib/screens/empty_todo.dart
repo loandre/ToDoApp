@@ -15,7 +15,7 @@ class EmptyTodoScreenState extends State<EmptyTodoScreen> {
       isExpanding = true;
     });
 
-    Future.delayed(Duration(milliseconds: 600), () {
+    Future.delayed(Duration(milliseconds: 300), () {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => InputTodoScreen()))
           .then((value) {

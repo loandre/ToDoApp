@@ -84,10 +84,22 @@ class TodosListScreenState extends State<TodosListScreen>
             color: item.isDone ? Colors.black : Colors.black45,
           ),
         ),
-        title: Text(
-          item.title,
-          style: TextStyle(
-            decoration: item.isDone ? TextDecoration.lineThrough : null,
+        title: Container(
+          padding: EdgeInsets.only(
+              bottom: 9.0),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: Colors.grey, width: 0.5),
+            ),
+          ),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              item.title,
+              style: TextStyle(
+                decoration: item.isDone ? TextDecoration.lineThrough : null,
+              ),
+            ),
           ),
         ),
       ),
@@ -106,25 +118,44 @@ class TodosListScreenState extends State<TodosListScreen>
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
+                SizedBox(height: 35),
                 Text(
                   'todo',
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10),
-                Text(
-                  DateFormat('EEEE dd MMM yyyy').format(DateTime.now()),
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
-                SizedBox(height: 20),
                 Expanded(
-                  child: ListView.separated(
-                    itemCount: todoItems.length,
-                    separatorBuilder: (context, index) => Divider(
-                      color: Colors.grey,
-                    ),
+                  child: ListView.builder(
+                    itemCount:
+                        todoItems.length + 2,
                     itemBuilder: (context, index) {
-                      return _buildTodoItem(todoItems[index]);
+                      if (index == 0) {
+                        return Divider(color: Colors.black);
+                      }
+                      if (index == 1) {
+                        // Data
+                        double paddingValue =
+                            MediaQuery.of(context).size.width *
+                                0.05;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 20),
+                            Padding(
+                              padding: EdgeInsets.only(left: paddingValue),
+                              child: Text(
+                                DateFormat('EEEE dd MMM yyyy')
+                                    .format(DateTime.now()),
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                          ],
+                        );
+                      }
+                      return _buildTodoItem(todoItems[index - 2]);
                     },
                   ),
                 ),
@@ -132,7 +163,7 @@ class TodosListScreenState extends State<TodosListScreen>
             ),
           ),
           Positioned(
-            top: 20,
+            top: 72,
             right: 20,
             child: AnimatedBuilder(
               animation: _controller,

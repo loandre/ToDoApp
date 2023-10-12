@@ -9,8 +9,50 @@ class InputTodoScreen extends StatefulWidget {
   InputTodoScreenState createState() => InputTodoScreenState();
 }
 
-class InputTodoScreenState extends State<InputTodoScreen> {
+class InputTodoScreenState extends State<InputTodoScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Color?> _colorAnimation;
+  late Animation<BorderRadius?> _borderRadiusAnimation;
+  bool _submitted = false;
   TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 750),
+    );
+
+    _borderRadiusAnimation = BorderRadiusTween(
+      begin: BorderRadius.circular(30.0),
+      end: BorderRadius.circular(50.0),
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+
+    _colorAnimation = ColorTween(
+      begin: Colors.white,
+      end: Colors.black,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _addTodoItem(controller.text);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   void _addTodoItem(String title) async {
     if (title.isNotEmpty) {
@@ -58,18 +100,49 @@ class InputTodoScreenState extends State<InputTodoScreen> {
                   ),
                 ),
                 Spacer(flex: 1),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+                AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _submitted = true;
+                        });
+                        _controller.forward();
+                      },
+                      child: ClipRect(
+                        child: Container(
+                          width: _submitted
+                              ? 50
+                              : MediaQuery.of(context).size.width * 0.9,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: _colorAnimation.value,
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: _borderRadiusAnimation.value ??
+                                BorderRadius.circular(20.0),
+                          ),
+                          child: _submitted && _controller.value > 0.5
+                              ? Center(
+                                  child: ScaleTransition(
+                                  scale: Tween(begin: 0.0, end: 0.8)
+                                      .animate(_controller),
+                                  child: Icon(Icons.check,
+                                      color: Colors.white, size: 24.0),
+                                ))
+                              : child,
+                        ),
+                      ),
+                    );
+                  },
                   child: Row(
-                    children: [
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
                       SizedBox(width: 15.0),
                       Expanded(
                         child: TextField(
                           controller: controller,
+                          enabled: !_submitted,
                           style: TextStyle(color: Colors.black),
                           decoration: InputDecoration(
                             hintText: 'What do you want to do today?',
@@ -77,15 +150,25 @@ class InputTodoScreenState extends State<InputTodoScreen> {
                             border: InputBorder.none,
                           ),
                           onSubmitted: (value) {
-                            _addTodoItem(value);
+                            if (value.isNotEmpty && !_submitted) {
+                              setState(() {
+                                _submitted = true;
+                              });
+                              _controller.forward();
+                            }
                           },
                         ),
                       ),
+                      SizedBox(width: 30.0),
                       IconButton(
                         icon: Icon(Icons.add, color: Colors.black),
                         onPressed: () {
-                          _addTodoItem(controller.text);
-                          controller.clear();
+                          if (controller.text.isNotEmpty && !_submitted) {
+                            setState(() {
+                              _submitted = true;
+                            });
+                            _controller.forward();
+                          }
                         },
                       ),
                     ],

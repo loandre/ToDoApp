@@ -102,7 +102,7 @@ class EmptyTodoScreenState extends State<EmptyTodoScreen> {
                               Icon(Icons.add, color: Colors.white),
                               SizedBox(
                                   width:
-                                      5.0), // Espaçamento entre ícone e texto
+                                      5.0),
                               Text(
                                 'Add item',
                                 style: TextStyle(

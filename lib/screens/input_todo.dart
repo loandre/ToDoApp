@@ -22,7 +22,7 @@ class InputTodoScreenState extends State<InputTodoScreen>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 750),
+      duration: const Duration(milliseconds: 400),
     );
 
     _borderRadiusAnimation = BorderRadiusTween(
@@ -112,67 +112,78 @@ class InputTodoScreenState extends State<InputTodoScreen>
                       },
                       child: ClipRect(
                         child: Container(
-                          width: _submitted
-                              ? 50
-                              : MediaQuery.of(context).size.width * 0.9,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: _colorAnimation.value,
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: _borderRadiusAnimation.value ??
-                                BorderRadius.circular(20.0),
-                          ),
-                          child: _submitted && _controller.value > 0.5
-                              ? Center(
-                                  child: ScaleTransition(
-                                  scale: Tween(begin: 0.0, end: 0.8)
-                                      .animate(_controller),
-                                  child: Icon(Icons.check,
-                                      color: Colors.white, size: 24.0),
-                                ))
-                              : child,
-                        ),
+                            width: _submitted
+                                ? 50
+                                : MediaQuery.of(context).size.width * 0.9,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: _colorAnimation.value,
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: _borderRadiusAnimation.value ??
+                                  BorderRadius.circular(20.0),
+                            ),
+                            child: _submitted && _controller.value > 0.5
+                                ? Center(
+                                    child: ScaleTransition(
+                                      scale: Tween(begin: 0.1, end: 0.7)
+                                          .animate(_controller),
+                                      child: Icon(Icons.check,
+                                          color: Colors.white, size: 24.0),
+                                    ),
+                                  )
+                                : Visibility(
+                                    visible: !_submitted, // Adicionado aqui
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        SizedBox(width: 15.0),
+                                        Expanded(
+                                          child: TextField(
+                                            controller: controller,
+                                            enabled: !_submitted,
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                            decoration: InputDecoration(
+                                              hintText:
+                                                  'What do you want to do today?',
+                                              hintStyle: TextStyle(
+                                                  color: Colors.black45),
+                                              border: InputBorder.none,
+                                            ),
+                                            onSubmitted: (value) {
+                                              if (value.isNotEmpty &&
+                                                  !_submitted) {
+                                                setState(() {
+                                                  _submitted = true;
+                                                });
+                                                _controller.forward();
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                        if (!_submitted) ...[
+                                          SizedBox(width: 30.0),
+                                          IconButton(
+                                            icon: Icon(Icons.add,
+                                                color: Colors.black),
+                                            onPressed: () {
+                                              if (controller.text.isNotEmpty &&
+                                                  !_submitted) {
+                                                setState(() {
+                                                  _submitted = true;
+                                                });
+                                                _controller.forward();
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  )),
                       ),
                     );
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      SizedBox(width: 15.0),
-                      Expanded(
-                        child: TextField(
-                          controller: controller,
-                          enabled: !_submitted,
-                          style: TextStyle(color: Colors.black),
-                          decoration: InputDecoration(
-                            hintText: 'What do you want to do today?',
-                            hintStyle: TextStyle(color: Colors.black45),
-                            border: InputBorder.none,
-                          ),
-                          onSubmitted: (value) {
-                            if (value.isNotEmpty && !_submitted) {
-                              setState(() {
-                                _submitted = true;
-                              });
-                              _controller.forward();
-                            }
-                          },
-                        ),
-                      ),
-                      SizedBox(width: 30.0),
-                      IconButton(
-                        icon: Icon(Icons.add, color: Colors.black),
-                        onPressed: () {
-                          if (controller.text.isNotEmpty && !_submitted) {
-                            setState(() {
-                              _submitted = true;
-                            });
-                            _controller.forward();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
                 ),
                 Spacer(flex: 1),
                 Center(

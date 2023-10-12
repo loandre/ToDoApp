@@ -9,13 +9,22 @@ class TodosListScreen extends StatefulWidget {
   TodosListScreenState createState() => TodosListScreenState();
 }
 
-class TodosListScreenState extends State<TodosListScreen> {
+class TodosListScreenState extends State<TodosListScreen>
+    with SingleTickerProviderStateMixin {
   List<TodoItem> todoItems = [];
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
     _loadTodoItems();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..value = 0.0;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller.forward();
+    });
   }
 
   void _loadTodoItems() async {
@@ -92,34 +101,79 @@ class TodosListScreenState extends State<TodosListScreen> {
     }
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: <Widget>[
-            Text(
-              'todo',
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              DateFormat('EEEE dd MMM yyyy').format(DateTime.now()),
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-            SizedBox(height: 20),
-            Expanded(
-              child: ListView.separated(
-                itemCount: todoItems.length,
-                separatorBuilder: (context, index) => Divider(
-                  color: Colors.grey,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'todo',
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
-                itemBuilder: (context, index) {
-                  return _buildTodoItem(todoItems[index]);
-                },
-              ),
+                SizedBox(height: 10),
+                Text(
+                  DateFormat('EEEE dd MMM yyyy').format(DateTime.now()),
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+                SizedBox(height: 20),
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: todoItems.length,
+                    separatorBuilder: (context, index) => Divider(
+                      color: Colors.grey,
+                    ),
+                    itemBuilder: (context, index) {
+                      return _buildTodoItem(todoItems[index]);
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            top: 20,
+            right: 20,
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(
+                      (MediaQuery.of(context).size.width / 2 - 200) *
+                          _controller.value,
+                      (MediaQuery.of(context).size.height / 2 - 370) *
+                          -_controller.value),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => EmptyTodoScreen(),
+                      ));
+                    },
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.black,
+                      child: AnimatedCrossFade(
+                        duration: const Duration(milliseconds: 400),
+                        firstChild: Icon(Icons.check, color: Colors.white),
+                        secondChild: Icon(Icons.add, color: Colors.white),
+                        crossFadeState: _controller.value > 0.5
+                            ? CrossFadeState.showSecond
+                            : CrossFadeState.showFirst,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
+        ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

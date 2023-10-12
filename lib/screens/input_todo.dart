@@ -58,9 +58,23 @@ class InputTodoScreenState extends State<InputTodoScreen>
     if (title.isNotEmpty) {
       TodoItem newItem = TodoItem(title: title);
       await DatabaseHelper.instance.insert(newItem.toMap());
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => TodosListScreen()),
+
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) => TodosListScreen(),
+          transitionDuration: Duration(seconds: 1),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var begin = Offset(0.0, 1.0);
+            var end = Offset.zero;
+            var curve = Curves.fastOutSlowIn;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(position: offsetAnimation, child: child);
+          },
+        ),
       );
     }
   }

@@ -8,9 +8,22 @@ class EmptyTodoScreen extends StatefulWidget {
 }
 
 class EmptyTodoScreenState extends State<EmptyTodoScreen> {
-  void _navigateToInputScreen() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => InputTodoScreen()));
+  bool isExpanding = false;
+
+  void _startAnimation() {
+    setState(() {
+      isExpanding = true;
+    });
+
+    Future.delayed(Duration(milliseconds: 600), () {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => InputTodoScreen()))
+          .then((value) {
+        setState(() {
+          isExpanding = false;
+        });
+      });
+    });
   }
 
   @override
@@ -48,17 +61,56 @@ class EmptyTodoScreenState extends State<EmptyTodoScreen> {
                   ),
                 ),
                 Spacer(flex: 2),
-                ElevatedButton.icon(
-                  onPressed: _navigateToInputScreen,
-                  icon: Icon(Icons.add, color: Colors.white),
-                  label: Text('Add item'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    onPrimary: Colors.white,
-                    shape: RoundedRectangleBorder(
+                GestureDetector(
+                  onTap: _startAnimation,
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 600),
+                    curve: Curves.fastOutSlowIn,
+                    width: isExpanding
+                        ? MediaQuery.of(context).size.width - 40
+                        : 140,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: isExpanding ? Colors.white : Colors.black,
+                      border:
+                          isExpanding ? Border.all(color: Colors.grey) : null,
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    alignment: Alignment.center,
+                    child: isExpanding
+                        ? Row(
+                            children: [
+                              SizedBox(width: 15.0),
+                              Expanded(
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    hintText: 'What do you want to do today?',
+                                    hintStyle: TextStyle(color: Colors.black45),
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.add, color: Colors.black),
+                                onPressed: () {},
+                              ),
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add, color: Colors.white),
+                              SizedBox(
+                                  width:
+                                      5.0), // Espaçamento entre ícone e texto
+                              Text(
+                                'Add item',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
                   ),
                 ),
                 Spacer(flex: 2),

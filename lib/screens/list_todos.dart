@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/models/item_todo.dart';
-import 'package:to_do_app/utils/database.dart';
+import 'package:to_do_app/services/database.dart';
 import 'package:to_do_app/screens/empty_todo.dart';
 
 class TodosListScreen extends StatefulWidget {
@@ -123,7 +123,7 @@ class TodosListScreenState extends State<TodosListScreen>
                 SizedBox(height: 35),
                 Text(
                   'todo',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 32),
                 ),
                 Expanded(
                   child: ListView.builder(

@@ -50,7 +50,7 @@ class EmptyTodoScreenState extends State<EmptyTodoScreen> {
                 Center(
                   child: Text(
                     'todo',
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 32),
                   ),
                 ),
                 SizedBox(height: 15),

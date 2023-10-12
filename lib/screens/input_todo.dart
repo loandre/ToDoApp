@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/models/item_todo.dart';
-import 'package:to_do_app/utils/database.dart';
+import 'package:to_do_app/services/database.dart';
 import 'package:to_do_app/screens/list_todos.dart';
 
 class InputTodoScreen extends StatefulWidget {
@@ -103,7 +103,7 @@ class InputTodoScreenState extends State<InputTodoScreen>
                 Center(
                   child: Text(
                     'todo',
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 32),
                   ),
                 ),
                 SizedBox(height: 45),

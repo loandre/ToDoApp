@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:to_do_app/models/item_todo.dart';
 import 'package:to_do_app/services/database_service.dart';
 import 'package:to_do_app/screens/empty_todo/empty_todo.dart';
+import 'package:to_do_app/screens/list_todo/widgets/list_circle.dart';
+import 'package:to_do_app/screens/list_todo/widgets/list_date_header.dart';
+import 'package:to_do_app/screens/list_todo/widgets/list_todo_item.dart';
 
-// Tela que exibe a lista de tarefas
 class TodosListScreen extends StatefulWidget {
   const TodosListScreen({super.key});
 
@@ -41,73 +42,6 @@ class TodosListScreenState extends State<TodosListScreen>
     });
   }
 
-  void _toggleTodoItem(TodoItem item) async {
-    setState(() {
-      item.isDone = !item.isDone;
-    });
-    await DatabaseHelper.instance.update(item.toMap());
-  }
-
-  void _deleteTodoItem(TodoItem item) async {
-    if (item.id != null) {
-      int rowsDeleted = await DatabaseHelper.instance.delete(item.id!);
-      print("Número de linhas excluídas: $rowsDeleted");
-      setState(() {
-        todoItems.remove(item);
-      });
-    }
-  }
-
-  Widget _buildTodoItem(TodoItem item) {
-    return Dismissible(
-      key: UniqueKey(),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        color: Colors.white,
-        child: const Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: Icon(Icons.delete, color: Colors.black),
-          ),
-        ),
-      ),
-      onDismissed: (direction) {
-        _deleteTodoItem(item);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Todo deletado")));
-      },
-      child: ListTile(
-        leading: GestureDetector(
-          onTap: () => _toggleTodoItem(item),
-          child: Icon(
-            item.isDone
-                ? Icons.radio_button_checked
-                : Icons.radio_button_unchecked,
-            color: item.isDone ? Colors.black : Colors.black45,
-          ),
-        ),
-        title: Container(
-          padding: const EdgeInsets.only(bottom: 9.0),
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(color: Colors.grey, width: 0.5),
-            ),
-          ),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              item.title,
-              style: TextStyle(
-                decoration: item.isDone ? TextDecoration.lineThrough : null,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     if (todoItems.isEmpty) {
@@ -135,27 +69,13 @@ class TodosListScreenState extends State<TodosListScreen>
                         return const Divider(color: Colors.black);
                       }
                       if (index == 1) {
-                        // Data
-                        double paddingValue =
-                            MediaQuery.of(context).size.width * 0.05;
-
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 20),
-                            Padding(
-                              padding: EdgeInsets.only(left: paddingValue),
-                              child: Text(
-                                DateFormat('EEEE dd MMM yyyy')
-                                    .format(DateTime.now()),
-                                style: TextStyle(color: Colors.grey[600]),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                          ],
-                        );
+                        return const ListTodoDateHeader(); // Sem argumentos.
                       }
-                      return _buildTodoItem(todoItems[index - 2]);
+                      return ListTodoItem(
+                        item: todoItems[index - 2],
+                        toggleTodo: _toggleTodoItem,
+                        deleteTodo: _deleteTodoItem,
+                      );
                     },
                   ),
                 ),
@@ -163,44 +83,34 @@ class TodosListScreenState extends State<TodosListScreen>
             ),
           ),
           Positioned(
-            top: 72,
-            right: 20,
-            child: AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(
-                      (MediaQuery.of(context).size.width / 2 - 200) *
-                          _controller.value,
-                      (MediaQuery.of(context).size.height / 2 - 370) *
-                          -_controller.value),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const EmptyTodoScreen(),
-                      ));
-                    },
-                    child: CircleAvatar(
-                      radius: 25,
-                      backgroundColor: Colors.black,
-                      child: AnimatedCrossFade(
-                        duration: const Duration(milliseconds: 400),
-                        firstChild:
-                            const Icon(Icons.check, color: Colors.white),
-                        secondChild: const Icon(Icons.add, color: Colors.white),
-                        crossFadeState: _controller.value > 0.5
-                            ? CrossFadeState.showSecond
-                            : CrossFadeState.showFirst,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          )
+            right: 20.0,
+            top: 72.0,
+            child: ListTodoCircleAvatar(
+                controller: _controller,
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const EmptyTodoScreen(),
+                  ));
+                }),
+          ),
         ],
       ),
     );
+  }
+
+  void _toggleTodoItem(TodoItem item) async {
+    setState(() {
+      item.isDone = !item.isDone;
+    });
+    await DatabaseHelper.instance.update(item.toMap());
+  }
+
+  void _deleteTodoItem(TodoItem item) async {
+    if (item.id != null) {
+      setState(() {
+        todoItems.remove(item);
+      });
+    }
   }
 
   @override

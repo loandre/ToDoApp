@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Widget para exibir texto de prompt no aplicativo
 class TodoPromptText extends StatelessWidget {
   const TodoPromptText({super.key});
 

@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+// Classe responsável pela interação com o banco de dados SQLite
 class DatabaseHelper {
   static const _databaseName = "todoDatabase.db";
   static const _databaseVersion = 1;
@@ -21,12 +22,14 @@ class DatabaseHelper {
     return _database!;
   }
 
+  // Inicializa o banco de dados e cria a tabela
   _initDatabase() async {
     String path = join(await getDatabasesPath(), _databaseName);
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
   }
 
+  // Cria a tabela no banco de dados
   Future _onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE $table (
@@ -37,6 +40,7 @@ class DatabaseHelper {
           ''');
   }
 
+  // Insere um novo item no banco de dados
   Future<int> insert(Map<String, dynamic> row) async {
     Database db = await instance.database;
     int id = await db.insert(table, row);
@@ -44,6 +48,7 @@ class DatabaseHelper {
     return id;
   }
 
+  // Consulta todos os registros da tabela
   Future<List<Map<String, dynamic>>> queryAllRows() async {
     Database db = await instance.database;
     List<Map<String, dynamic>> items =
@@ -52,6 +57,7 @@ class DatabaseHelper {
     return items;
   }
 
+  // Atualiza um registro no banco de dados
   Future<int> update(Map<String, dynamic> row) async {
     Database db = await instance.database;
     int id = row['_id'];
@@ -59,6 +65,7 @@ class DatabaseHelper {
     return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
   }
 
+  // Exclui um registro do banco de dados
   Future<int> delete(int id) async {
     Database db = await instance.database;
     int affectedRows =

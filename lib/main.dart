@@ -10,6 +10,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Configuração inicial do aplicativo Flutter
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Todo App',

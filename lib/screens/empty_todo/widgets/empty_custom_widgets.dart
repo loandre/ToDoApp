@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Widget para exibir texto centralizado
 class CenteredText extends StatelessWidget {
   final String text;
   final TextStyle? style;
@@ -17,6 +18,7 @@ class CenteredText extends StatelessWidget {
   }
 }
 
+// Botão animado que pode expandir
 class AnimatedAddButton extends StatefulWidget {
   final bool isExpanding;
   final Function onTap;
@@ -28,6 +30,7 @@ class AnimatedAddButton extends StatefulWidget {
   AnimatedAddButtonState createState() => AnimatedAddButtonState();
 }
 
+// Estado do botão animado
 class AnimatedAddButtonState extends State<AnimatedAddButton> {
   @override
   Widget build(BuildContext context) {

@@ -4,6 +4,7 @@ import 'package:to_do_app/models/item_todo.dart';
 import 'package:to_do_app/services/database_service.dart';
 import 'package:to_do_app/screens/empty_todo/empty_todo.dart';
 
+// Tela que exibe a lista de tarefas
 class TodosListScreen extends StatefulWidget {
   const TodosListScreen({super.key});
 
@@ -87,8 +88,7 @@ class TodosListScreenState extends State<TodosListScreen>
           ),
         ),
         title: Container(
-          padding: const EdgeInsets.only(
-              bottom: 9.0),
+          padding: const EdgeInsets.only(bottom: 9.0),
           decoration: const BoxDecoration(
             border: Border(
               bottom: BorderSide(color: Colors.grey, width: 0.5),
@@ -129,8 +129,7 @@ class TodosListScreenState extends State<TodosListScreen>
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount:
-                        todoItems.length + 2,
+                    itemCount: todoItems.length + 2,
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return const Divider(color: Colors.black);
@@ -138,8 +137,7 @@ class TodosListScreenState extends State<TodosListScreen>
                       if (index == 1) {
                         // Data
                         double paddingValue =
-                            MediaQuery.of(context).size.width *
-                                0.05;
+                            MediaQuery.of(context).size.width * 0.05;
 
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,7 +185,8 @@ class TodosListScreenState extends State<TodosListScreen>
                       backgroundColor: Colors.black,
                       child: AnimatedCrossFade(
                         duration: const Duration(milliseconds: 400),
-                        firstChild: const Icon(Icons.check, color: Colors.white),
+                        firstChild:
+                            const Icon(Icons.check, color: Colors.white),
                         secondChild: const Icon(Icons.add, color: Colors.white),
                         crossFadeState: _controller.value > 0.5
                             ? CrossFadeState.showSecond

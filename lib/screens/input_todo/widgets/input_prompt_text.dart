@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+// Widget que exibe um texto de prompt para adicionar tarefas
 class TodoPromptText extends StatelessWidget {
+  const TodoPromptText({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Center(

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_app/screens/input_todo/input_todo_screen.dart';
-import 'package:to_do_app/screens/empty_todo/widgets/custom_widgets.dart';
-import 'package:to_do_app/screens/empty_todo/widgets/app_header.dart';
-import 'package:to_do_app/screens/empty_todo/widgets/todo_prompt_text.dart';
+import 'package:to_do_app/screens/empty_todo/widgets/empty_custom_widgets.dart';
+import 'package:to_do_app/screens/empty_todo/widgets/empty_header.dart';
+import 'package:to_do_app/screens/empty_todo/widgets/empty_prompt_text.dart';
 
+// Tela vazia que aparece quando não há tarefas a serem exibidas
 class EmptyTodoScreen extends StatefulWidget {
   const EmptyTodoScreen({super.key});
 
@@ -12,8 +13,10 @@ class EmptyTodoScreen extends StatefulWidget {
 }
 
 class EmptyTodoScreenState extends State<EmptyTodoScreen> {
-  bool isExpanding = false;
+  // Estado de expansão do botão de adição
+  bool isExpanding = false; 
 
+  // Inicia a animação e navega para a tela de adição de tarefas
   void _startAnimation() {
     setState(() {
       isExpanding = true;
@@ -21,7 +24,8 @@ class EmptyTodoScreenState extends State<EmptyTodoScreen> {
 
     Future.delayed(const Duration(milliseconds: 300), () {
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const InputTodoScreen()))
+          .push(
+              MaterialPageRoute(builder: (context) => const InputTodoScreen()))
           .then((value) {
         setState(() {
           isExpanding = false;

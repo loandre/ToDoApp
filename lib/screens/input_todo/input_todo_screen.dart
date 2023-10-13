@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_app/screens/input_todo/widgets/app_header.dart';
-import 'package:to_do_app/screens/input_todo/widgets/todo_prompt_text.dart';
-import 'package:to_do_app/screens/input_todo/widgets/input_todo_provider.dart';
+import 'package:to_do_app/screens/input_todo/widgets/input_header.dart';
+import 'package:to_do_app/screens/input_todo/widgets/input_prompt_text.dart';
+import 'package:to_do_app/screens/input_todo/widgets/input_input_provider.dart';
 
+// Tela onde os usuários podem adicionar novas tarefas
 class InputTodoScreen extends StatefulWidget {
   const InputTodoScreen({Key? key}) : super(key: key);
 
@@ -25,20 +26,20 @@ class InputTodoScreenState extends State<InputTodoScreen> {
             bottom: 0,
             child: Container(color: Colors.grey[100]),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
+          const Padding(
+            padding: EdgeInsets.all(20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                const Spacer(flex: 2),
+                Spacer(flex: 2),
                 AppHeader(),
-                const SizedBox(height: 45),
-                const Spacer(flex: 1),
+                SizedBox(height: 45),
+                Spacer(flex: 1),
                 InputTodoProvider(),
-                const Spacer(flex: 1),
+                Spacer(flex: 1),
                 TodoPromptText(),
-                const Spacer(flex: 2),
+                Spacer(flex: 2),
               ],
             ),
           ),

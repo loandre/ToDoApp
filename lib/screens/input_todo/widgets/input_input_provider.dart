@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_app/models/item_todo.dart';
 import 'package:to_do_app/services/database_service.dart';
-import 'package:to_do_app/screens/third_screen/todo_list_screen.dart';
+import 'package:to_do_app/screens/list_todo/list_todo_screen.dart';
 
+// Classe que gerencia a entrada de novas tarefas
 class InputTodoProvider extends StatefulWidget {
+  const InputTodoProvider({super.key});
+
   @override
-  _InputTodoProviderState createState() => _InputTodoProviderState();
+  InputTodoProviderState createState() => InputTodoProviderState();
 }
 
-class _InputTodoProviderState extends State<InputTodoProvider>
+class InputTodoProviderState extends State<InputTodoProvider>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation;
@@ -24,6 +27,7 @@ class _InputTodoProviderState extends State<InputTodoProvider>
       duration: const Duration(milliseconds: 600),
     );
 
+    // Configurações de animação para a mudança de cor e raio da borda
     _borderRadiusAnimation = BorderRadiusTween(
       begin: BorderRadius.circular(30.0),
       end: BorderRadius.circular(50.0),
@@ -53,6 +57,7 @@ class _InputTodoProviderState extends State<InputTodoProvider>
     super.dispose();
   }
 
+  // Adiciona uma nova tarefa ao banco de dados e navega para a lista de tarefas
   void _addTodoItem(String title) async {
     if (title.isNotEmpty) {
       TodoItem newItem = TodoItem(title: title);
@@ -61,7 +66,8 @@ class _InputTodoProviderState extends State<InputTodoProvider>
       if (mounted) {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
-            pageBuilder: (context, animation1, animation2) => const TodosListScreen(),
+            pageBuilder: (context, animation1, animation2) =>
+                const TodosListScreen(),
             transitionDuration: const Duration(seconds: 1),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
@@ -100,8 +106,8 @@ class _InputTodoProviderState extends State<InputTodoProvider>
               decoration: BoxDecoration(
                 color: _colorAnimation.value,
                 border: Border.all(color: Colors.grey),
-                borderRadius: _borderRadiusAnimation.value ??
-                    BorderRadius.circular(20.0),
+                borderRadius:
+                    _borderRadiusAnimation.value ?? BorderRadius.circular(20.0),
               ),
               child: _submitted && _controller.value > 0.5
                   ? Center(
@@ -123,8 +129,7 @@ class _InputTodoProviderState extends State<InputTodoProvider>
                               enabled: !_submitted,
                               style: const TextStyle(color: Colors.black),
                               decoration: const InputDecoration(
-                                hintStyle:
-                                    TextStyle(color: Colors.black45),
+                                hintStyle: TextStyle(color: Colors.black45),
                                 border: InputBorder.none,
                               ),
                               onSubmitted: (value) {

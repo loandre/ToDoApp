@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_app/screens/input_todo/widgets/input_header.dart';
 import 'package:to_do_app/screens/input_todo/widgets/input_prompt_text.dart';
-import 'package:to_do_app/screens/input_todo/widgets/input_input_provider.dart';
+import 'package:to_do_app/screens/input_todo/widgets/input_provider.dart';
 
 // Tela onde os usuários podem adicionar novas tarefas
 class InputTodoScreen extends StatefulWidget {

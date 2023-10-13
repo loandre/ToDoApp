@@ -20,9 +20,10 @@ class CenteredText extends StatelessWidget {
 class AnimatedAddButton extends StatefulWidget {
   final bool isExpanding;
   final Function onTap;
-  
-  const AnimatedAddButton({super.key, required this.isExpanding, required this.onTap});
-  
+
+  const AnimatedAddButton(
+      {super.key, required this.isExpanding, required this.onTap});
+
   @override
   AnimatedAddButtonState createState() => AnimatedAddButtonState();
 }
@@ -33,9 +34,10 @@ class AnimatedAddButtonState extends State<AnimatedAddButton> {
     return GestureDetector(
       onTap: widget.onTap as void Function()?,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 600),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.fastOutSlowIn,
-        width: widget.isExpanding ? MediaQuery.of(context).size.width - 40 : 140,
+        width:
+            widget.isExpanding ? MediaQuery.of(context).size.width - 40 : 140,
         height: 50,
         decoration: BoxDecoration(
           color: widget.isExpanding ? Colors.white : Colors.black,
@@ -50,7 +52,6 @@ class AnimatedAddButtonState extends State<AnimatedAddButton> {
                   const Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: 'What do you want to do today?',
                         hintStyle: TextStyle(color: Colors.black45),
                         border: InputBorder.none,
                       ),

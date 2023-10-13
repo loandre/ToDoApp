@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_app/screens/input_todo_screen.dart';
-import 'package:to_do_app/widgets/custom_widgets.dart';
-import 'package:to_do_app/widgets/app_header.dart';
-import 'package:to_do_app/widgets/todo_prompt_text.dart';
+import 'package:to_do_app/screens/input_todo/input_todo_screen.dart';
+import 'package:to_do_app/screens/empty_todo/widgets/custom_widgets.dart';
+import 'package:to_do_app/screens/empty_todo/widgets/app_header.dart';
+import 'package:to_do_app/screens/empty_todo/widgets/todo_prompt_text.dart';
 
 class EmptyTodoScreen extends StatefulWidget {
   const EmptyTodoScreen({super.key});

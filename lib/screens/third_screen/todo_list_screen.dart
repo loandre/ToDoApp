@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/models/item_todo.dart';
 import 'package:to_do_app/services/database_service.dart';
-import 'package:to_do_app/screens/empty_todo.dart';
+import 'package:to_do_app/screens/empty_todo/empty_todo.dart';
 
 class TodosListScreen extends StatefulWidget {
   const TodosListScreen({super.key});

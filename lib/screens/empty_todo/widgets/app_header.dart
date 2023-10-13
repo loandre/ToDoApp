@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:to_do_app/widgets/custom_widgets.dart';
+import 'package:to_do_app/screens/empty_todo/widgets/custom_widgets.dart';
 
 class AppHeader extends StatelessWidget {
   const AppHeader({super.key});

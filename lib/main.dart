@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_app/screens/empty_todo.dart';
+import 'package:to_do_app/screens/empty_todo/empty_todo.dart';
 
 void main() {
   runApp(const MyApp());

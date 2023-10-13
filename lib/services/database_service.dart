@@ -44,6 +44,7 @@ class DatabaseHelper {
   Future<int> insert(Map<String, dynamic> row) async {
     Database db = await instance.database;
     int id = await db.insert(table, row);
+    print('Inserted item with id: $id and data: $row');
     return id;
   }
 
@@ -52,6 +53,7 @@ class DatabaseHelper {
     Database db = await instance.database;
     List<Map<String, dynamic>> items =
         await db.query(table, orderBy: '$columnId DESC');
+    print('Fetched ${items.length} items from database.');
     return items;
   }
 
@@ -59,6 +61,7 @@ class DatabaseHelper {
   Future<int> update(Map<String, dynamic> row) async {
     Database db = await instance.database;
     int id = row['_id'];
+    print('Updating item with ID $id with data: $row');
     return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
   }
 
@@ -67,6 +70,7 @@ class DatabaseHelper {
     Database db = await instance.database;
     int affectedRows =
         await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+    print('Deleted item with id: $id. Affected rows: $affectedRows');
     return affectedRows;
   }
 }

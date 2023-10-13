@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:to_do_app/screens/input_todo.dart';
+import 'package:to_do_app/screens/input_todo_screen.dart';
+import 'package:to_do_app/widgets/custom_widgets.dart';
+import 'package:to_do_app/widgets/app_header.dart';
+import 'package:to_do_app/widgets/todo_prompt_text.dart';
 
 class EmptyTodoScreen extends StatefulWidget {
+  const EmptyTodoScreen({super.key});
+
   @override
   EmptyTodoScreenState createState() => EmptyTodoScreenState();
 }
@@ -15,9 +19,9 @@ class EmptyTodoScreenState extends State<EmptyTodoScreen> {
       isExpanding = true;
     });
 
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => InputTodoScreen()))
+          .push(MaterialPageRoute(builder: (context) => const InputTodoScreen()))
           .then((value) {
         setState(() {
           isExpanding = false;
@@ -46,82 +50,19 @@ class EmptyTodoScreenState extends State<EmptyTodoScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Spacer(flex: 3),
-                Center(
-                  child: Text(
-                    'todo',
-                    style: TextStyle(fontSize: 32),
-                  ),
-                ),
-                SizedBox(height: 15),
-                Center(
-                  child: Text(
-                    DateFormat('EEEE dd MMM yyyy').format(DateTime.now()),
-                    style: TextStyle(color: Colors.grey[600]),
-                  ),
-                ),
-                Spacer(flex: 2),
+                const Spacer(flex: 3),
+                const AppHeader(),
+                const Spacer(flex: 2),
                 GestureDetector(
                   onTap: _startAnimation,
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 600),
-                    curve: Curves.fastOutSlowIn,
-                    width: isExpanding
-                        ? MediaQuery.of(context).size.width - 40
-                        : 140,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: isExpanding ? Colors.white : Colors.black,
-                      border:
-                          isExpanding ? Border.all(color: Colors.grey) : null,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    alignment: Alignment.center,
-                    child: isExpanding
-                        ? Row(
-                            children: [
-                              SizedBox(width: 15.0),
-                              Expanded(
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    hintText: 'What do you want to do today?',
-                                    hintStyle: TextStyle(color: Colors.black45),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.add, color: Colors.black),
-                                onPressed: () {},
-                              ),
-                            ],
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.add, color: Colors.white),
-                              SizedBox(
-                                  width:
-                                      5.0),
-                              Text(
-                                'Add item',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
+                  child: AnimatedAddButton(
+                    isExpanding: isExpanding,
+                    onTap: _startAnimation,
                   ),
                 ),
-                Spacer(flex: 2),
-                Center(
-                  child: Text(
-                    "What do you want to do today?\nStart adding items to your to-do list.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey[600]),
-                  ),
-                ),
-                Spacer(flex: 3),
+                const Spacer(flex: 2),
+                const Center(child: TodoPromptText()),
+                const Spacer(flex: 3),
               ],
             ),
           ),

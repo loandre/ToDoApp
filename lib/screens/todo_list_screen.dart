@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/models/item_todo.dart';
-import 'package:to_do_app/services/database.dart';
+import 'package:to_do_app/services/database_service.dart';
 import 'package:to_do_app/screens/empty_todo.dart';
 
 class TodosListScreen extends StatefulWidget {
+  const TodosListScreen({super.key});
+
   @override
   TodosListScreenState createState() => TodosListScreenState();
 }
@@ -61,10 +63,10 @@ class TodosListScreenState extends State<TodosListScreen>
       direction: DismissDirection.endToStart,
       background: Container(
         color: Colors.white,
-        child: Align(
+        child: const Align(
           alignment: Alignment.centerRight,
           child: Padding(
-            padding: const EdgeInsets.only(right: 20.0),
+            padding: EdgeInsets.only(right: 20.0),
             child: Icon(Icons.delete, color: Colors.black),
           ),
         ),
@@ -72,7 +74,7 @@ class TodosListScreenState extends State<TodosListScreen>
       onDismissed: (direction) {
         _deleteTodoItem(item);
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Todo deletado")));
+            .showSnackBar(const SnackBar(content: Text("Todo deletado")));
       },
       child: ListTile(
         leading: GestureDetector(
@@ -85,9 +87,9 @@ class TodosListScreenState extends State<TodosListScreen>
           ),
         ),
         title: Container(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
               bottom: 9.0),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             border: Border(
               bottom: BorderSide(color: Colors.grey, width: 0.5),
             ),
@@ -109,7 +111,7 @@ class TodosListScreenState extends State<TodosListScreen>
   @override
   Widget build(BuildContext context) {
     if (todoItems.isEmpty) {
-      return EmptyTodoScreen();
+      return const EmptyTodoScreen();
     }
 
     return Scaffold(
@@ -120,8 +122,8 @@ class TodosListScreenState extends State<TodosListScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                SizedBox(height: 35),
-                Text(
+                const SizedBox(height: 35),
+                const Text(
                   'todo',
                   style: TextStyle(fontSize: 32),
                 ),
@@ -131,7 +133,7 @@ class TodosListScreenState extends State<TodosListScreen>
                         todoItems.length + 2,
                     itemBuilder: (context, index) {
                       if (index == 0) {
-                        return Divider(color: Colors.black);
+                        return const Divider(color: Colors.black);
                       }
                       if (index == 1) {
                         // Data
@@ -142,7 +144,7 @@ class TodosListScreenState extends State<TodosListScreen>
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             Padding(
                               padding: EdgeInsets.only(left: paddingValue),
                               child: Text(
@@ -151,7 +153,7 @@ class TodosListScreenState extends State<TodosListScreen>
                                 style: TextStyle(color: Colors.grey[600]),
                               ),
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                           ],
                         );
                       }
@@ -177,7 +179,7 @@ class TodosListScreenState extends State<TodosListScreen>
                   child: GestureDetector(
                     onTap: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => EmptyTodoScreen(),
+                        builder: (context) => const EmptyTodoScreen(),
                       ));
                     },
                     child: CircleAvatar(
@@ -185,8 +187,8 @@ class TodosListScreenState extends State<TodosListScreen>
                       backgroundColor: Colors.black,
                       child: AnimatedCrossFade(
                         duration: const Duration(milliseconds: 400),
-                        firstChild: Icon(Icons.check, color: Colors.white),
-                        secondChild: Icon(Icons.add, color: Colors.white),
+                        firstChild: const Icon(Icons.check, color: Colors.white),
+                        secondChild: const Icon(Icons.add, color: Colors.white),
                         crossFadeState: _controller.value > 0.5
                             ? CrossFadeState.showSecond
                             : CrossFadeState.showFirst,

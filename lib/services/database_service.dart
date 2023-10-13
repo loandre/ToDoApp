@@ -2,10 +2,10 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static final _databaseName = "todoDatabase.db";
-  static final _databaseVersion = 1;
+  static const _databaseName = "todoDatabase.db";
+  static const _databaseVersion = 1;
 
-  static final table = 'todo_items';
+  static const table = 'todo_items';
 
   static const columnId = '_id';
   static const columnTitle = 'title';

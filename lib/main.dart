@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:to_do_app/screens/empty_todo.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => EmptyTodoScreen(),
+        '/': (context) => const EmptyTodoScreen(),
       },
     );
   }

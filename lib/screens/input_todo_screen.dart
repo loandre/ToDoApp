@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/models/item_todo.dart';
-import 'package:to_do_app/services/database.dart';
-import 'package:to_do_app/screens/list_todos.dart';
+import 'package:to_do_app/services/database_service.dart';
+import 'package:to_do_app/screens/todo_list_screen.dart';
 
 class InputTodoScreen extends StatefulWidget {
+  const InputTodoScreen({Key? key}) : super(key: key);
+
   @override
   InputTodoScreenState createState() => InputTodoScreenState();
 }
@@ -59,23 +61,26 @@ class InputTodoScreenState extends State<InputTodoScreen>
       TodoItem newItem = TodoItem(title: title);
       await DatabaseHelper.instance.insert(newItem.toMap());
 
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => TodosListScreen(),
-          transitionDuration: Duration(seconds: 1),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            var begin = Offset(0.0, 1.0);
-            var end = Offset.zero;
-            var curve = Curves.fastOutSlowIn;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) => const TodosListScreen(),
+            transitionDuration: const Duration(seconds: 1),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              var begin = const Offset(0.0, 1.0);
+              var end = Offset.zero;
+              var curve = Curves.fastOutSlowIn;
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-            var offsetAnimation = animation.drive(tween);
+              var offsetAnimation = animation.drive(tween);
 
-            return SlideTransition(position: offsetAnimation, child: child);
-          },
-        ),
-      );
+              return SlideTransition(position: offsetAnimation, child: child);
+            },
+          ),
+        );
+      }
     }
   }
 
@@ -99,21 +104,21 @@ class InputTodoScreenState extends State<InputTodoScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Spacer(flex: 2),
-                Center(
+                const Spacer(flex: 2),
+                const Center(
                   child: Text(
                     'todo',
                     style: TextStyle(fontSize: 32),
                   ),
                 ),
-                SizedBox(height: 45),
+                const SizedBox(height: 45),
                 Center(
                   child: Text(
                     DateFormat('EEEE dd MMM yyyy').format(DateTime.now()),
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                 ),
-                Spacer(flex: 1),
+                const Spacer(flex: 1),
                 AnimatedBuilder(
                   animation: _controller,
                   builder: (context, child) {
@@ -141,24 +146,24 @@ class InputTodoScreenState extends State<InputTodoScreen>
                                     child: ScaleTransition(
                                       scale: Tween(begin: 0.1, end: 0.7)
                                           .animate(_controller),
-                                      child: Icon(Icons.check,
+                                      child: const Icon(Icons.check,
                                           color: Colors.white, size: 24.0),
                                     ),
                                   )
                                 : Visibility(
-                                    visible: !_submitted, // Adicionado aqui
+                                    visible: !_submitted,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
-                                        SizedBox(width: 15.0),
+                                        const SizedBox(width: 15.0),
                                         Expanded(
                                           child: TextField(
                                             controller: controller,
                                             enabled: !_submitted,
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                            decoration: InputDecoration(
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                            decoration: const InputDecoration(
                                               hintText:
                                                   'What do you want to do today?',
                                               hintStyle: TextStyle(
@@ -177,9 +182,9 @@ class InputTodoScreenState extends State<InputTodoScreen>
                                           ),
                                         ),
                                         if (!_submitted) ...[
-                                          SizedBox(width: 30.0),
+                                          const SizedBox(width: 30.0),
                                           IconButton(
-                                            icon: Icon(Icons.add,
+                                            icon: const Icon(Icons.add,
                                                 color: Colors.black),
                                             onPressed: () {
                                               if (controller.text.isNotEmpty &&
@@ -199,7 +204,7 @@ class InputTodoScreenState extends State<InputTodoScreen>
                     );
                   },
                 ),
-                Spacer(flex: 1),
+                const Spacer(flex: 1),
                 Center(
                   child: Text(
                     "What do you want to do today?\nStart adding items to your to-do list.",
@@ -207,7 +212,7 @@ class InputTodoScreenState extends State<InputTodoScreen>
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                 ),
-                Spacer(flex: 2),
+                const Spacer(flex: 2),
               ],
             ),
           ),

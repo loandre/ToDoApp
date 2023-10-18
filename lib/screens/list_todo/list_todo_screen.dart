@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/models/item_todo.dart';
-import 'package:to_do_app/services/database_service.dart';
+import 'package:to_do_app/services/firestore_service.dart';
 import 'package:to_do_app/screens/empty_todo/empty_todo.dart';
 
 // Tela que exibe a lista de tarefas
@@ -32,7 +32,7 @@ class TodosListScreenState extends State<TodosListScreen>
 
   void _loadTodoItems() async {
     List<Map<String, dynamic>> allRows =
-        await DatabaseHelper.instance.queryAllRows();
+        await FirestoreService.instance.queryAllRows();
     List<TodoItem> loadedItems =
         allRows.map((row) => TodoItem.fromMap(row)).toList();
 
@@ -45,18 +45,18 @@ class TodosListScreenState extends State<TodosListScreen>
     setState(() {
       item.isDone = !item.isDone;
     });
-    await DatabaseHelper.instance.update(item.toMap());
+    await FirestoreService.instance.update(item.toMap());
   }
 
   void _deleteTodoItem(TodoItem item) async {
-    if (item.id != null) {
-      int rowsDeleted = await DatabaseHelper.instance.delete(item.id!);
-      print("Número de linhas excluídas: $rowsDeleted");
-      setState(() {
-        todoItems.remove(item);
-      });
-    }
-  }
+   if (item.id != null) {
+       await FirestoreService.instance.delete(item.id!.toString());
+       print("Todo item excluído");
+       setState(() {
+           todoItems.remove(item);
+       });
+   }
+}
 
   Widget _buildTodoItem(TodoItem item) {
     return Dismissible(

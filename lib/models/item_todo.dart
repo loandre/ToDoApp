@@ -1,5 +1,5 @@
 class TodoItem {
-  int? id;
+  String? id;
   String title;
   bool isDone;
 
@@ -13,10 +13,10 @@ class TodoItem {
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       'title': title,
-      'isDone': isDone ? 1 : 0,
+      'isDone': isDone, // Usando o booleano diretamente
     };
     if (id != null) {
-      map['_id'] = id!;
+      map['id'] = id; // Usando 'id' em vez de '_id'
     }
     return map;
   }
@@ -24,9 +24,9 @@ class TodoItem {
   // Converter um Map em um TodoItem
   factory TodoItem.fromMap(Map<String, dynamic> map) {
     return TodoItem(
-      id: map['_id'],
+      id: map['id'],
       title: map['title'],
-      isDone: map['isDone'] == 1,
+      isDone: map['isDone'] as bool, // Tratando isDone como booleano
     );
   }
 }

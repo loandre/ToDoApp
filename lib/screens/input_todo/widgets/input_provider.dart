@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_app/models/item_todo.dart';
-import 'package:to_do_app/services/database_service.dart';
+import 'package:to_do_app/services/firestore_service.dart';
 import 'package:to_do_app/screens/list_todo/list_todo_screen.dart';
 
 // Classe que gerencia a entrada de novas tarefas
@@ -61,7 +61,7 @@ class InputTodoProviderState extends State<InputTodoProvider>
   void _addTodoItem(String title) async {
     if (title.isNotEmpty) {
       TodoItem newItem = TodoItem(title: title);
-      await DatabaseHelper.instance.insert(newItem.toMap());
+      await FirestoreService.instance.insert(newItem.toMap());
 
       if (mounted) {
         Navigator.of(context).pushReplacement(

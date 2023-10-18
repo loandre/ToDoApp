@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_app/models/item_todo.dart';
-import 'package:to_do_app/services/database_service.dart';
+import 'package:to_do_app/services/firestore_service.dart';
 
 // Classe que gerencia o estado relacionado à entrada de novas tarefas
 class InputTodoProvider with ChangeNotifier {
@@ -29,7 +29,7 @@ class InputTodoProvider with ChangeNotifier {
   void addTodoItem(String title) async {
     if (title.isNotEmpty) {
       TodoItem newItem = TodoItem(title: title);
-      await DatabaseHelper.instance.insert(newItem.toMap());
+      await FirestoreService.instance.insert(newItem.toMap());
       notifyListeners(); // Notifica os ouvintes sobre a alteração nos dados
     }
   }
